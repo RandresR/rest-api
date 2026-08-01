@@ -5,7 +5,6 @@ on:
     branches:
       - main
 
-# 1. Variables globales
 env:
   IMAGE_NAME: rest_api
 
@@ -28,13 +27,10 @@ jobs:
         with:
           context: .
           push: true
-          # 2.3 Construir con el tag: latest
           tags: ${{ secrets.DOCKER_USERNAME }}/${{ env.IMAGE_NAME }}:latest
-          # 2.2 Agregar argumentos a la imagen
           build-args: |
             APP_ENV=${{ secrets.APP_ENV }}
 
-  # 3. Integración de pruebas unitarias
   test:
     name: Run tests
     needs: build
@@ -46,7 +42,7 @@ jobs:
       - name: Setup Node.js
         uses: actions/setup-node@v4
         with:
-          node-version: "26" # Actualizado para coincidir con tu Dockerfile
+          node-version: "26" 
 
       - name: Install dependencies
         run: npm install
