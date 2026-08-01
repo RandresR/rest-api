@@ -10,7 +10,7 @@ FROM base AS builder
 COPY ./src ./src
 COPY package*.json ./
 
-RUN npm install
+RUN npm install --legacy-peer-deps
 RUN npm prune --production && node-prune
 
 #----------------RELEASE-----------------
