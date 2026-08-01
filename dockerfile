@@ -10,8 +10,8 @@ FROM base AS builder
 COPY ./src ./src
 COPY package*.json ./
 
-RUN npm install --legacy-peer-deps
-RUN npm prune --omit=dev --legacy-peer-deps && node-prune
+RUN npm install
+RUN npm prune --omit=dev && node-prune
 
 #----------------RELEASE-----------------
 FROM node:26-alpine3.23 AS release
