@@ -6,7 +6,7 @@ function getUserName() {
 }
 
 function calculateAge(yearOfBirth) {
-  var currentYear = new Date().getFullYear();
+  const currentYear = new Date().getFullYear();
   return currentYear - yearOfBirth;
 }
 
