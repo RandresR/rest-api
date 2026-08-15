@@ -6,7 +6,7 @@ on:
       - main
 
 env:
-  REGISTRY: randres
+  REGISTRY: crandres
   IMAGE_NAME: rest_api
 
 jobs:
