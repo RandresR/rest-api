@@ -1,0 +1,31 @@
+name: dast
+
+on:
+  push:
+    branches: ["main"]
+
+env:
+  REGISTRY: randres
+  IMAGE_NAME: rest_api
+
+jobs:
+  dast:
+    permissions:
+      issues: write
+       
+    name: ZAP - DAST Test
+    runs-on: ubuntu-latest
+
+		steps:
+      - uses: actions/checkout@v3
+        name: Checkout code
+
+      - name: run api
+        run: |
+          npm install
+          npm run dev
+
+      - name: ZAP Scan
+        uses: zaproxy/action-api-scan@v0.10.0
+        with:
+          target: 'http://localhost:3000/search?q=123'

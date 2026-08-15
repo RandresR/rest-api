@@ -2,7 +2,7 @@ name: dast
 
 on:
   push:
-    branches: ["main"]
+    branches: ["main-x"]
 
 jobs:
   build:
