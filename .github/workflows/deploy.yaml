@@ -35,3 +35,5 @@ loadTest:
         run: |
           set -e  
           artillery run loadTest/basic.yaml || exit 1
+
+##comentamos
