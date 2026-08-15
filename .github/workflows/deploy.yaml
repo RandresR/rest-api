@@ -6,6 +6,7 @@ on:
       - main
 
 env:
+  REGISTRY: randres 
   IMAGE_NAME: rest_api
 
 jobs:
@@ -27,7 +28,8 @@ jobs:
         with:
           context: .
           push: true
-          tags: ${{ secrets.DOCKER_USERNAME }}/${{ env.IMAGE_NAME }}:latest3
+          # CORRECCIÓN: Unificado al tag 'latest' para que coincida con loadTest
+          tags: ${{ secrets.DOCKER_USERNAME }}/${{ env.IMAGE_NAME }}:latest
           build-args: |
             APP_ENV=${{ secrets.APP_ENV }}
 
@@ -37,7 +39,7 @@ jobs:
     runs-on: ubuntu-latest
 
     steps:
-      - uses: actions/checkout@v3
+      - uses: actions/checkout@v4
         name: Checkout code
 
       - name: Set up
@@ -49,16 +51,18 @@ jobs:
         run: |
           npm install -g artillery
           npm install --save-dev artillery-plugin-ensure
+          npm install -g wait-on # CORRECCIÓN: Necesario para pausar el script
 
       - name: Run container
         run: |
           docker run -d --name rest-api -p 3000:3000 ${{ env.REGISTRY }}/${{ env.IMAGE_NAME }}:latest
+          npx wait-on http://localhost:3000 # CORRECCIÓN: Da tiempo al contenedor a inicializar
 
       - name: Run Load Test
         run: |
-          set -e  # Detiene el workflow si la prueba de carga falla.
-
+          set -e  
           artillery run loadTest/basic.yaml || exit 1
+
   test:
     name: Run tests
     needs: build
@@ -70,7 +74,7 @@ jobs:
       - name: Setup Node.js
         uses: actions/setup-node@v4
         with:
-          node-version: "26"
+          node-version: "22" # CORRECCIÓN: Ajustado a 22 (o 20), la 26 aún no es estándar
           
       - name: Install dependencies
         run: npm install
@@ -79,13 +83,14 @@ jobs:
         run: npm test
         env:
           APP_ENV: ${{ secrets.APP_ENV }}
+
   codeScan:
     name: SonarCloud codeScan
     runs-on: ubuntu-latest
     needs: test
     steps: 
       - name: Checkout code
-        uses: actions/checkout@v3
+        uses: actions/checkout@v4
 
       - name: SonarCloud codeScan
         uses: SonarSource/sonarcloud-github-action@master
