@@ -12,18 +12,18 @@ jobs:
   dast:
     permissions:
       issues: write
-       
+
     name: ZAP - DAST Test
     runs-on: ubuntu-latest
 
-		steps:
+steps:
       - uses: actions/checkout@v3
         name: Checkout code
 
       - name: run api
         run: |
           npm install
-          npm run dev
+          npm run dev&
 
       - name: ZAP Scan
         uses: zaproxy/action-api-scan@v0.10.0
