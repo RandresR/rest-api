@@ -2,7 +2,7 @@ name: dast
 
 on:
   push:
-    branches: ["main"]
+    branches: ["mainx"]
 
 env:
   REGISTRY: randres
@@ -16,7 +16,6 @@ jobs:
     name: ZAP - DAST Test
     runs-on: ubuntu-latest
 
-    # FIXED: 'steps' is now properly indented under the 'dast' job
     steps:
       - uses: actions/checkout@v3
         name: Checkout code
